@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "55865567936",
+    "project_id": "accesorios-para-mascotas-96d2a",
+    "storage_bucket": "accesorios-para-mascotas-96d2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55865567936:android:e32564d79ef2e79c275b25",
+        "android_client_info": {
+          "package_name": "com.example.accesorios_para_mascotas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55865567936-tjtkbknt5fka0o6t8rnu0bv8fogkb18v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxGTsWwxMUajQA_8HzHGn26kYYzWAcxKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55865567936-tjtkbknt5fka0o6t8rnu0bv8fogkb18v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "55865567936-bho6gqgkgk7tpv0orpkmfe2qmo2v6l8e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.accesoriosParaMascotas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
