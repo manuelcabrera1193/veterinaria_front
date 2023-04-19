@@ -1,6 +1,6 @@
+import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
+import 'package:accesorios_para_mascotas/values/edge_insets_app.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:accesorios_para_mascotas/Util/sizing_info.dart';
-import 'package:accesorios_para_mascotas/Values/EdgeInsetsApp.dart';
 
 class ResponsiveApp {
   BuildContext? _context;

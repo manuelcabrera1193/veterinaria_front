@@ -1,5 +1,5 @@
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
 
 class SectionContainer extends StatefulWidget {
   const SectionContainer({

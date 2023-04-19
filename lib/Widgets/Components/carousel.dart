@@ -1,10 +1,12 @@
+import 'package:accesorios_para_mascotas/models/carousel.dart';
+import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Modelo/Carousel.dart';
-import 'package:accesorios_para_mascotas/Util/sizing_info.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
 
 class Carousel extends StatefulWidget {
+  const Carousel({super.key});
+
   @override
   State<Carousel> createState() => _CarouselState();
 }

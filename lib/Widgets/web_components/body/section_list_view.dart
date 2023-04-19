@@ -1,17 +1,22 @@
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Modelo/section.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
+import 'package:accesorios_para_mascotas/models/section.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import 'menu_section.dart';
 import 'product_section.dart';
 
-class SectionListView extends StatelessWidget {
-  AutoScrollController autoScrollController;
+class SectionListView extends StatefulWidget {
+  final AutoScrollController autoScrollController;
 
-  SectionListView({Key? key, required this.autoScrollController})
+  const SectionListView({Key? key, required this.autoScrollController})
       : super(key: key);
 
+  @override
+  State<SectionListView> createState() => _SectionListViewState();
+}
+
+class _SectionListViewState extends State<SectionListView> {
   late ResponsiveApp responsiveApp;
 
   @override
@@ -28,7 +33,9 @@ class SectionListView extends StatelessWidget {
                         responsiveApp.edgeInsetsApp?.allExLargeEdgeInsets ??
                             const EdgeInsets.all(10),
                     child: addScroll(
-                        MenuSection(scrollController: autoScrollController), 0))
+                        MenuSection(
+                            scrollController: widget.autoScrollController),
+                        0))
                 : Padding(
                     padding:
                         responsiveApp.edgeInsetsApp?.allExLargeEdgeInsets ??
@@ -42,7 +49,7 @@ class SectionListView extends StatelessWidget {
   addScroll(Widget child, index) {
     return AutoScrollTag(
       key: ValueKey(index),
-      controller: autoScrollController,
+      controller: widget.autoScrollController,
       index: index,
       child: child,
     );

@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';import 'package:flutter/material.dart';
 
 class HeaderButton extends StatefulWidget {
   final String title;

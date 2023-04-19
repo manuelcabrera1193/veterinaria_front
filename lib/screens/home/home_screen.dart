@@ -1,4 +1,4 @@
-import 'package:accesorios_para_mascotas/Pages/home_page.dart';
+import 'package:accesorios_para_mascotas/pages/home_page.dart';
 import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
 import 'package:accesorios_para_mascotas/utils/auth.dart';
 import 'package:accesorios_para_mascotas/utils/constants.dart';

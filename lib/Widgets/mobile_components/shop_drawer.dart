@@ -1,13 +1,15 @@
 import 'package:accesorios_para_mascotas/screens/home/body_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
-import 'package:accesorios_para_mascotas/Values/StringApp.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
 
 class ShopDrawer extends StatefulWidget {
   final Function(BodyEnum body) redirect;
+  final bool isLogged;
   const ShopDrawer({
     Key? key,
     required this.redirect,
+    required this.isLogged,
   }) : super(key: key);
 
   @override
@@ -81,9 +83,13 @@ class _ShopDrawerState extends State<ShopDrawer> {
                 ),
                 getItem(
                   onTap: () {
-                    widget.redirect(BodyEnum.login);
+                    if (widget.isLogged) {
+                      widget.redirect(BodyEnum.profile);
+                    } else {
+                      widget.redirect(BodyEnum.login);
+                    }
                   },
-                  title: login,
+                  title: widget.isLogged ? profile : login,
                   icon: Icons.lock_outline,
                 ),
                 Expanded(
@@ -94,7 +100,7 @@ class _ShopDrawerState extends State<ShopDrawer> {
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       copyrightStr,
-                      style: Theme.of(context).accentTextTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ))
@@ -107,7 +113,7 @@ class _ShopDrawerState extends State<ShopDrawer> {
   getItem({String? title, IconData? icon, onTap}) {
     return ListTile(
       onTap: onTap,
-      title: Text(title ?? "", style: Theme.of(context).textTheme.bodyText2),
+      title: Text(title ?? "", style: Theme.of(context).textTheme.bodyMedium),
       leading: Icon(
         icon,
         color: Theme.of(context).iconTheme.color,

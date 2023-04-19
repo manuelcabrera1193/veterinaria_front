@@ -1,6 +1,6 @@
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Modelo/Menu.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
+import 'package:accesorios_para_mascotas/models/menu.dart';
 
 class MenuContainer extends StatefulWidget {
   const MenuContainer({Key? key, required this.index, required this.onPress})

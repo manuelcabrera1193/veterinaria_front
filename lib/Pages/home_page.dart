@@ -1,16 +1,16 @@
+import 'package:accesorios_para_mascotas/utils/keys.dart';
+import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
+import 'package:accesorios_para_mascotas/widgets/mobile_components/menu_tap.dart';
+import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_app_bar.dart';
+import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_drawer.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:accesorios_para_mascotas/screens/home/body_enum.dart';
-import 'package:accesorios_para_mascotas/Util/keys.dart';
-import 'package:accesorios_para_mascotas/Util/sizing_info.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
-import 'package:accesorios_para_mascotas/Widgets/Components/carousel.dart';
-import 'package:accesorios_para_mascotas/Widgets/MobileComponents/menu_tap.dart';
-import 'package:accesorios_para_mascotas/Widgets/MobileComponents/shop_app_bar.dart';
-import 'package:accesorios_para_mascotas/Widgets/MobileComponents/shop_drawer.dart';
-import 'package:accesorios_para_mascotas/Widgets/WebComponents/Body/section_list_view.dart';
-import 'package:accesorios_para_mascotas/Widgets/WebComponents/Footer/footer.dart';
-import 'package:accesorios_para_mascotas/Widgets/WebComponents/Header/header_web.dart';
+import 'package:accesorios_para_mascotas/widgets/Components/carousel.dart';
 import 'package:accesorios_para_mascotas/screens/home/home_controller.dart';
 import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/body/section_list_view.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/footer/footer.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/header/header_web.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -68,13 +68,18 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: isMobileAndTablet(context)
-          ? ShopDrawer(
-              redirect: (body) {
-                homeController.redirectScreen(body);
-                homeScaffoldKey.currentState!.openEndDrawer();
-                setState(() {});
-              },
-            )
+          ? FutureBuilder(
+              future: homeController.isLooged(),
+              builder: (context, AsyncSnapshot<bool> info) {
+                return ShopDrawer(
+                  isLogged: info.data ?? false,
+                  redirect: (body) {
+                    homeController.redirectScreen(body);
+                    homeScaffoldKey.currentState!.openEndDrawer();
+                    setState(() {});
+                  },
+                );
+              })
           : Container(),
       body: ListView(
         controller: autoScrollController,
@@ -134,7 +139,7 @@ class BodyContainer extends StatelessWidget {
             ),
             Carousel(),
             isMobileAndTablet(context)
-                ? MenuTap()
+                ? const MenuTap()
                 : SectionListView(
                     autoScrollController: autoScrollController,
                   ),
@@ -145,7 +150,7 @@ class BodyContainer extends StatelessWidget {
       case BodyEnum.carrito:
         return const BodyItem(name: "carrito");
       case BodyEnum.nosotros:
-        return const BodyItem(name: "nosotros");
+        return const NosotrosWidget();
       case BodyEnum.login:
         return const LoginScreen();
       case BodyEnum.contactamos:
@@ -157,6 +162,164 @@ class BodyContainer extends StatelessWidget {
       default:
         return Container();
     }
+  }
+}
+
+class NosotrosWidget extends StatelessWidget {
+  const NosotrosWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Wrap(
+            alignment: WrapAlignment.spaceAround,
+            spacing: 50,
+            runSpacing: 50,
+            //crossAxisCount: isMobileAndTablet(context) ? 4 : 2,
+            children: const [
+              CardNosotros(
+                title: "Implante Microchip",
+                description:
+                    "Un microchip para perros siempre se mantendrá seguro en su lugar. Si sucede lo peor y tu perro se pierde, un microchip puede ayudar a garantizar ...",
+              ),
+              CardNosotros(
+                title: "Ultrasonido",
+                description:
+                    "Consiste en echar un vistazo a los órganos que se encuentran en el abdomen y el tórax de su perro o su gato; estos órganos incluyen ...",
+              ),
+              CardNosotros(
+                title: "Servicio de Transporte",
+                description:
+                    "Encontrar el servicio de transporte adecuado que pueda cuidar adecuadamente a su mascota, mantener el costo de la entrega a un precio bajo ...",
+              ),
+              CardNosotros(
+                title: "Vacunas",
+                description:
+                    "Las vacunas más comunes son la trivalente, la tetravalente o bien la polivalente ...",
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.all(24.0),
+            child: Divider(
+              height: 10,
+            ),
+          ),
+          const Card2Nosotros(
+            title: "ACERCA DE NUESTRA CLINICA:",
+            description:
+                "Nuestro Equipo te garantiza una atencion A1. \nEn nuestra clínica encontrarás todo lo que tu mascota necesita en un solo lugar. Convivir con perros y gatos en el embarazo tiene beneficios para la salud ...",
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Card2Nosotros extends StatelessWidget {
+  const Card2Nosotros({
+    Key? key,
+    required this.title,
+    required this.description,
+  }) : super(key: key);
+
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: Colors.orangeAccent,
+      child: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellowAccent,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                description,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CardNosotros extends StatelessWidget {
+  const CardNosotros({
+    Key? key,
+    required this.title,
+    required this.description,
+  }) : super(key: key);
+
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      color: Colors.orangeAccent,
+      child: SizedBox(
+        width: 200,
+        height: 300,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellowAccent,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

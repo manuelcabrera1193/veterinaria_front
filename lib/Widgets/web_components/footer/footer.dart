@@ -1,11 +1,19 @@
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
-import 'package:accesorios_para_mascotas/Values/StringApp.dart';
-import 'package:accesorios_para_mascotas/Widgets/WebComponents/Footer/bottom_colum.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/footer/bottom_colum.dart';
 import 'package:flutter/material.dart';
 
 import 'info_text.dart';
 
-class Footer extends StatelessWidget {
+class Footer extends StatefulWidget {
+
+  const Footer({super.key});
+
+  @override
+  State<Footer> createState() => _FooterState();
+}
+
+class _FooterState extends State<Footer> {
   late ResponsiveApp responsiveApp;
 
   @override

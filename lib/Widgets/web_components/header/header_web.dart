@@ -1,8 +1,8 @@
-import 'package:accesorios_para_mascotas/Widgets/WebComponents/Header/header_button.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:accesorios_para_mascotas/screens/home/body_enum.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/header/header_button.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
-import 'package:accesorios_para_mascotas/Values/StringApp.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
 
 class HeaderWeb extends StatefulWidget implements PreferredSizeWidget {
   final double opacity;

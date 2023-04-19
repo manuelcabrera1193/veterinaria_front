@@ -1,7 +1,7 @@
 import 'package:accesorios_para_mascotas/screens/home/body_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
-import 'package:accesorios_para_mascotas/Values/StringApp.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
 
 class ShopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double opacity;

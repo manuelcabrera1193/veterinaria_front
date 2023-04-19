@@ -1,9 +1,8 @@
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/Modelo/product.dart';
-import 'package:accesorios_para_mascotas/Values/ResponsiveApp.dart';
+import 'package:accesorios_para_mascotas/models/product.dart';
 
 class ProductContainerScreen extends StatefulWidget {
-  static const String routerName = '/Product';
   final Product product;
 
   final Function() onPress;

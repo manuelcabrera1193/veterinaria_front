@@ -1,4 +1,4 @@
-import 'package:accesorios_para_mascotas/Values/StringApp.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
 
 class Menu {
   final String title, image;

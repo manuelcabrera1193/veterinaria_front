@@ -19,4 +19,8 @@ class HomeController extends SuperController<dynamic> {
   void redirectScreen(BodyEnum body) {
     bodyEnumState(body);
   }
+
+  Future<bool> isLooged() async {
+    return true;
+  }
 }

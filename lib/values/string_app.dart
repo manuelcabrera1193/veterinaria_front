@@ -18,6 +18,7 @@ String get nosotros => "Nosotros";
 String get contactos => "Contactos";
 String get registros => "Registros";
 String get conocenos => "Conocenos";
+String get profile => "Perfil";
 String get login => "Iniciar Sesión";
 String get copyrightStr => "Copyright © 2023 | GRUPO 6";
 String get emailStr => "Correo";
