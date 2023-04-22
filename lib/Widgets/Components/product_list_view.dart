@@ -1,9 +1,9 @@
+import 'package:accesorios_para_mascotas/models/item_product.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/models/product.dart';
 import 'product_container_screen.dart';
 
 class ProductListView extends StatelessWidget {
-  final List<Product> list;
+  final List<ItemProduct> list;
 
   const ProductListView({Key? key, required this.list}) : super(key: key);
 

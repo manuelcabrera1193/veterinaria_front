@@ -1,4 +1,4 @@
-import 'package:accesorios_para_mascotas/screens/home/body_enum.dart';
+import 'package:accesorios_para_mascotas/models/body_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:accesorios_para_mascotas/values/string_app.dart';
@@ -35,10 +35,10 @@ class _ShopAppBarState extends State<ShopAppBar> {
               Text(
                 shopStr,
                 style: TextStyle(
-                  color: Colors.blueGrey[100],
+                  color: Colors.white,
                   fontSize: responsiveApp.headline6 * 1.5,
                   fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.bold,
                   letterSpacing: responsiveApp.letterSpacingHeaderWidth,
                 ),
               ),

@@ -6,5 +6,9 @@ enum BodyEnum {
   registros,
   ventas,
   nosotros,
-  carrito, profile, users, products, categories
+  carrito,
+  profile,
+  users,
+  products,
+  categories
 }

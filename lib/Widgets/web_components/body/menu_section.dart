@@ -1,17 +1,21 @@
+import 'package:accesorios_para_mascotas/utils/scroll.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:accesorios_para_mascotas/widgets/web_components/body/container/menu_container.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/models/menu.dart';
 import 'package:accesorios_para_mascotas/values/string_app.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import 'container/section_container.dart';
 
 class MenuSection extends StatefulWidget {
+  final List<String> names;
   final AutoScrollController scrollController;
 
-  const MenuSection({Key? key, required this.scrollController})
-      : super(key: key);
+  const MenuSection({
+    Key? key,
+    required this.names,
+    required this.scrollController,
+  }) : super(key: key);
 
   @override
   State<MenuSection> createState() => _MenuSectionState();
@@ -31,20 +35,21 @@ class _MenuSectionState extends State<MenuSection> {
           subTitle: sectionMenuSubTitleStr,
         ),
         Padding(
-            padding: responsiveApp.edgeInsetsApp?.onlyExLargeTopEdgeInsets ??
-                const EdgeInsets.all(0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                  menu.length,
-                  (index) => MenuContainer(
-                      index: index, onPress: () => scrollIndex(index + 1))),
-            ))
+          padding: responsiveApp.edgeInsetsApp?.onlyExLargeTopEdgeInsets ??
+              const EdgeInsets.all(0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              widget.names.length,
+              (index) => MenuContainer(
+                index: index,
+                onPress: () => scrollIndex(index + 1, widget.scrollController),
+                names: widget.names,
+              ),
+            ),
+          ),
+        )
       ],
     );
-  }
-
-  scrollIndex(index) {
-    widget.scrollController.scrollToIndex(index);
   }
 }

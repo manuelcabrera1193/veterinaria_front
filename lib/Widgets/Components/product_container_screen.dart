@@ -1,9 +1,9 @@
+import 'package:accesorios_para_mascotas/models/item_product.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
-import 'package:accesorios_para_mascotas/models/product.dart';
 
 class ProductContainerScreen extends StatefulWidget {
-  final Product product;
+  final ItemProduct product;
 
   final Function() onPress;
 
@@ -29,9 +29,9 @@ class _ProductContainerScreenState extends State<ProductContainerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.product.title.toUpperCase(),
+              widget.product.name.toUpperCase(),
             ),
-            Text(widget.product.price),
+            Text(widget.product.price.toString()),
           ],
         ),
       ),

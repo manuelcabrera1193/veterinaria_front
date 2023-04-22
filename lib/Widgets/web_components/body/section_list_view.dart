@@ -1,3 +1,6 @@
+import 'package:accesorios_para_mascotas/models/categories.dart';
+import 'package:accesorios_para_mascotas/models/item_product.dart';
+import 'package:accesorios_para_mascotas/utils/scroll.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
 import 'package:flutter/material.dart';
 import 'package:accesorios_para_mascotas/models/section.dart';
@@ -8,9 +11,15 @@ import 'product_section.dart';
 
 class SectionListView extends StatefulWidget {
   final AutoScrollController autoScrollController;
+  final List<Categories> categories;
+  final List<ItemProduct> products;
 
-  const SectionListView({Key? key, required this.autoScrollController})
-      : super(key: key);
+  const SectionListView({
+    Key? key,
+    required this.autoScrollController,
+    required this.categories,
+    required this.products,
+  }) : super(key: key);
 
   @override
   State<SectionListView> createState() => _SectionListViewState();
@@ -22,10 +31,22 @@ class _SectionListViewState extends State<SectionListView> {
   @override
   Widget build(BuildContext context) {
     responsiveApp = ResponsiveApp(context);
+    final list = widget.categories
+        .map(
+          (e) => Section(
+            title: e.name,
+            color: Colors.yellow,
+            subtitle: e.description,
+            list: widget.products
+                .where((element) => element.category.uid == e.uid)
+                .toList(),
+          ),
+        )
+        .toList();
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
-          sections.length + 1,
+          list.length + 1,
           (index) {
             return (index == 0)
                 ? Padding(
@@ -33,25 +54,25 @@ class _SectionListViewState extends State<SectionListView> {
                         responsiveApp.edgeInsetsApp?.allExLargeEdgeInsets ??
                             const EdgeInsets.all(10),
                     child: addScroll(
-                        MenuSection(
-                            scrollController: widget.autoScrollController),
-                        0))
+                      MenuSection(
+                        names: list.map((e) => e.title).toList(),
+                        scrollController: widget.autoScrollController,
+                      ),
+                      0,
+                      widget.autoScrollController,
+                    ),
+                  )
                 : Padding(
                     padding:
                         responsiveApp.edgeInsetsApp?.allExLargeEdgeInsets ??
                             const EdgeInsets.all(10),
                     child: addScroll(
-                        ProductSection(section: sections[index - 1]), index));
+                      ProductSection(section: list[index - 1]),
+                      index,
+                      widget.autoScrollController,
+                    ),
+                  );
           },
         ));
-  }
-
-  addScroll(Widget child, index) {
-    return AutoScrollTag(
-      key: ValueKey(index),
-      controller: widget.autoScrollController,
-      index: index,
-      child: child,
-    );
   }
 }

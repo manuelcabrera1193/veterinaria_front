@@ -1,58 +1,233 @@
-import 'package:accesorios_para_mascotas/pages/home_page.dart';
+import 'package:accesorios_para_mascotas/models/body_enum.dart';
+import 'package:accesorios_para_mascotas/models/profile.dart';
+import 'package:accesorios_para_mascotas/screens/home/home_body.dart';
+import 'package:accesorios_para_mascotas/screens/home/home_controller.dart';
 import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
-import 'package:accesorios_para_mascotas/utils/auth.dart';
-import 'package:accesorios_para_mascotas/utils/constants.dart';
+import 'package:accesorios_para_mascotas/screens/nosotros/nosotros_screen.dart';
+import 'package:accesorios_para_mascotas/screens/profile/profile_screen.dart';
+import 'package:accesorios_para_mascotas/screens/register/categories_screen.dart';
+import 'package:accesorios_para_mascotas/screens/register/products_screen.dart';
+import 'package:accesorios_para_mascotas/screens/register/users_screen.dart';
+import 'package:accesorios_para_mascotas/utils/keys.dart';
+import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
+import 'package:accesorios_para_mascotas/values/responsive_app.dart';
+import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_app_bar.dart';
+import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_drawer.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/footer/footer.dart';
+import 'package:accesorios_para_mascotas/widgets/web_components/header/header_web.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routerName = '/Home';
 
   const HomeScreen({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return const HomePage();
+  }
+}
 
-  // Future<bool> isLooged() async {
-  //   final looged = await Auth.flutterSecureStorage.read(key: kUsername);
-  //   return looged?.isNotEmpty ?? false;
-  // }
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  double _scrollPosition = 0;
+  double _opacity = 0;
+
+  late AutoScrollController autoScrollController;
+  bool _isVisible = false;
+  ResponsiveApp? responsiveApp;
+
+  final homeController = Get.find<HomeController>();
+
+  _scrollListener() {
+    setState(() {
+      _scrollPosition = autoScrollController.position.pixels;
+    });
+  }
+
+  @override
+  void initState() {
+    autoScrollController = AutoScrollController(
+        viewportBoundaryGetter: () =>
+            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical);
+
+    autoScrollController!.addListener(_scrollListener);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return HomePage();
-    // return Scaffold(
-    //   appBar: AppBar(),
-    //   drawer: Drawer(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       children: [
-    //         FutureBuilder(
-    //             future: isLooged(),
-    //             builder: (_, AsyncSnapshot<bool> logged) {
-    //               return (logged.data ?? true)
-    //                   ? MaterialButton(
-    //                       onPressed: () {
-    //                         Auth.signOut();
-    //                         Get.offAll(HomeScreen.routerName);
-    //                       },
-    //                       child: const Text("Cerrar Sesión"),
-    //                     )
-    //                   : MaterialButton(
-    //                       onPressed: () {
-    //                         Get.toNamed(LoginScreen.routerName);
-    //                       },
-    //                       child: const Text("Ingresar"),
-    //                     );
-    //             }),
-    //         MaterialButton(
-    //           onPressed: () {},
-    //           child: const Text("Ingresar"),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   body: const Center(
-    //     child: Text('HomeScreen'),
-    //   ),
-    // );
+    responsiveApp = ResponsiveApp(context);
+
+    _opacity = _scrollPosition < responsiveApp?.opacityHeight
+        ? _scrollPosition / responsiveApp?.opacityHeight
+        : 1;
+
+    _isVisible = _scrollPosition >= responsiveApp!.menuHeight;
+    return Scaffold(
+      key: homeScaffoldKey,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      floatingActionButton: Visibility(
+        visible: _isVisible,
+        child: FloatingActionButton(
+          onPressed: () => {autoScrollController.scrollToIndex(0)},
+          child: const Icon(Icons.arrow_upward),
+        ),
+      ),
+      drawer: isMobileAndTablet(context)
+          ? ShopDrawer(
+              user: homeController.getUser(),
+              redirect: (body) {
+                homeController.redirectScreen(body);
+                homeScaffoldKey.currentState!.openEndDrawer();
+                setState(() {});
+              },
+            )
+          : Container(),
+      body: ListView(
+        controller: autoScrollController,
+        children: [
+          isMobileAndTablet(context)
+              ? AppBar(
+                  title: ShopAppBar(
+                  opacity: _opacity,
+                  redirect: (body) {
+                    homeController.redirectScreen(body);
+                    homeScaffoldKey.currentState!.openEndDrawer();
+                    setState(() {});
+                  },
+                ))
+              : HeaderWeb(
+                  user: homeController.getUser(),
+                  opacity: 1,
+                  redirect: (body) {
+                    homeController.redirectScreen(body);
+                    setState(() {});
+                  }),
+          /**
+           * Start Body
+           */
+          BodyContainer(
+            autoScrollController: autoScrollController,
+            body: homeController.bodyEnumState.value,
+            user: homeController.getUser(),
+            login: executeLogin,
+            loginGoogle: executeLoginGoogle,
+            loginFacebook: executeLoginFacebook,
+            logout: logout,
+          ),
+          /**
+           * End Body
+           */
+
+          isMobileAndTablet(context) ? const SizedBox.shrink() : const Footer()
+        ],
+      ),
+    );
+  }
+
+  Future<void> logout() async {
+    await homeController.logout();
+    setState(() {});
+  }
+
+  Future<String> executeLoginGoogle() async {
+    final result = await homeController.executeLoginGoogle();
+    setState(() {});
+    return result;
+  }
+
+  Future<String> executeLoginFacebook() async {
+    final result = await homeController.executeLoginFacebook();
+    setState(() {});
+    return result;
+  }
+
+  Future<String> executeLogin(value1, value2) async {
+    final result = await homeController.executeLogin(value1, value2);
+    setState(() {});
+    return result;
+  }
+}
+
+class BodyContainer extends StatelessWidget {
+  final AutoScrollController autoScrollController;
+  final BodyEnum body;
+  final Profile? user;
+  final Future<String> Function(String, String) login;
+  final Future<String> Function() loginGoogle;
+  final Future<String> Function() loginFacebook;
+  final Future<void> Function() logout;
+
+  const BodyContainer({
+    super.key,
+    required this.autoScrollController,
+    required this.body,
+    required this.user,
+    required this.login,
+    required this.loginGoogle,
+    required this.loginFacebook,
+    required this.logout,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (body) {
+      case BodyEnum.home:
+        return HomeBody(autoScrollController: autoScrollController);
+      case BodyEnum.contacts:
+        return const BodyItem(name: "contacts");
+      case BodyEnum.users:
+        return const ListUsersScreen();
+      case BodyEnum.products:
+        return const ProductsScreen();
+      case BodyEnum.categories:
+        return const CategoriesScreen();
+      case BodyEnum.carrito:
+        return const BodyItem(name: "carrito");
+      case BodyEnum.nosotros:
+        return NosotrosWidget(autoScrollController: autoScrollController);
+      case BodyEnum.login:
+        return LoginScreen(
+          login: login,
+          loginGoogle: loginGoogle,
+          loginFacebook: loginFacebook,
+        );
+      case BodyEnum.profile:
+        return ProfileScreen(
+          autoScrollController: autoScrollController,
+          user: user,
+          logout: logout,
+        );
+      case BodyEnum.contactamos:
+        return const BodyItem(name: "contactamos");
+      case BodyEnum.registros:
+        return const ListUsersScreen();
+      case BodyEnum.ventas:
+        return const BodyItem(name: "ventas");
+      default:
+        return Container();
+    }
+  }
+}
+
+class BodyItem extends StatelessWidget {
+  final String name;
+  const BodyItem({
+    super.key,
+    required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("Titulo $name");
   }
 }
