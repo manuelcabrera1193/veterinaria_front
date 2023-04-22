@@ -1,9 +1,9 @@
+import 'package:accesorios_para_mascotas/models/profile.dart';
 import 'package:accesorios_para_mascotas/models/sale_detail.dart';
-import 'package:accesorios_para_mascotas/models/user.dart';
 
 class Sale {
   int correlativo;
-  User usuario;
+  Profile usuario;
   DateTime fecha;
   double total;
   List<SaleDetail> saleDetails;

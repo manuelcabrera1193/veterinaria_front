@@ -4,10 +4,18 @@ import 'package:accesorios_para_mascotas/utils/main_bindings.dart';
 import 'package:accesorios_para_mascotas/utils/pages_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FacebookAuth.instance.webAndDesktopInitialize(
+    appId: "118249261241040",
+    cookie: true,
+    xfbml: true,
+    version: "v15.0",
+  );
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

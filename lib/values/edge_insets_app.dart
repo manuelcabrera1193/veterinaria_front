@@ -1,4 +1,5 @@
 
+import 'package:accesorios_para_mascotas/Values/responsive_app.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';import 'package:flutter/material.dart';
 
 
@@ -39,23 +40,20 @@ class EdgeInsetsApp {
   EdgeInsets? onlyExLargeTopEdgeInsets;
 
 
-  late ResponsiveApp _responsiveApp;
-
-
-  EdgeInsetsApp(this._responsiveApp){
+  EdgeInsetsApp(_responsiveApp){
 
     //Padding
-    double _smallHeightEdgeInsets =_responsiveApp.setHeight(5);
-    double _smallWidthEdgeInsets =_responsiveApp.setWidth(5);
+    double _smallHeightEdgeInsets =_responsiveApp?.setHeight(5);
+    double _smallWidthEdgeInsets =_responsiveApp?.setWidth(5);
 
-    double  _mediumHeightEdgeInsets =_responsiveApp.setHeight(10);
-    double  _mediumWidthEdgeInsets =_responsiveApp.setWidth(10);
+    double  _mediumHeightEdgeInsets =_responsiveApp?.setHeight(10);
+    double  _mediumWidthEdgeInsets =_responsiveApp?.setWidth(10);
 
-    double  _largeHeightEdgeInsets =_responsiveApp.setHeight(20);
-    double  _largeWidthEdgeInsets =_responsiveApp.setWidth(20);
+    double  _largeHeightEdgeInsets =_responsiveApp?.setHeight(20);
+    double  _largeWidthEdgeInsets =_responsiveApp?.setWidth(20);
 
-    double  _largeExHeightEdgeInsets =_responsiveApp.setHeight(100);
-    double  _largeExWidthEdgeInsets =_responsiveApp.setWidth(100);
+    double  _largeExHeightEdgeInsets =_responsiveApp?.setHeight(100);
+    double  _largeExWidthEdgeInsets =_responsiveApp?.setWidth(100);
     //Todo
     allSmallEdgeInsets =
         EdgeInsets.symmetric(vertical: _smallHeightEdgeInsets,

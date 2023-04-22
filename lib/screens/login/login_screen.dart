@@ -1,14 +1,17 @@
-import 'package:accesorios_para_mascotas/screens/home/home_screen.dart';
-import 'package:accesorios_para_mascotas/utils/auth.dart';
-import 'package:accesorios_para_mascotas/utils/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:accesorios_para_mascotas/screens/widgets/input.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String routerName = '/Login';
+  final Future<String> Function(String p1, String p2) login;
+  final Future<String> Function() loginGoogle;
+  final Future<String> Function() loginFacebook;
 
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({
+    Key? key,
+    required this.login,
+    required this.loginGoogle,
+    required this.loginFacebook,
+  }) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -38,28 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(
-              height: 80,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Text(
-                    "Login",
-                    style: TextStyle(color: Colors.white, fontSize: 40),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Bienvenido",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(height: 20),
             Container(
               decoration: const BoxDecoration(
@@ -72,8 +53,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(30),
                   child: Column(
                     children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const <Widget>[
+                          Text(
+                            "Login",
+                            style: TextStyle(color: Colors.grey, fontSize: 40),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Bienvenido",
+                            style: TextStyle(color: Colors.grey, fontSize: 18),
+                          ),
+                        ],
+                      ),
                       const SizedBox(
-                        height: 60,
+                        height: 20,
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -107,10 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
                                   _email = input ?? "";
                                 },
-                                decoration: const InputDecoration(
-                                    hintText: "Email",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
                               ),
                             ),
                             Container(
@@ -160,10 +153,75 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.orange[900]),
                         child: MaterialButton(
-                          onPressed: signIn,
+                          onPressed: () async {
+                            setState(() {
+                              _error = "";
+                            });
+                            if (_formKey.currentState?.validate() ?? false) {
+                              _formKey.currentState?.save();
+                              _error = await widget.login(_email, _password);
+                            }
+                            setState(() {});
+                          },
                           child: const Center(
                             child: Text(
                               "Ingresar",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal: 50),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.red),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            setState(() {
+                              _error = "";
+                            });
+                            _error = await widget.loginGoogle();
+
+                            setState(() {});
+                          },
+                          child: const Center(
+                            child: Text(
+                              "Ingresar con Google",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(horizontal: 50),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.blue),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            setState(() {
+                              _error = "";
+                            });
+                            _error = await widget.loginFacebook();
+
+                            setState(() {});
+                          },
+                          child: const Center(
+                            child: Text(
+                              "Ingresar con Facebook",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -196,31 +254,5 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // Compara el valor de entrada con la expresión regular y devuelve un booleano
     return correoRegex.hasMatch(correo);
-  }
-
-  void signIn() async {
-    setState(() {
-      _error = "";
-    });
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      try {
-        UserCredential userCredential =
-            await Auth.signInWithEmailAndPassword(_email, _password);
-        print("credential $userCredential");
-        Auth.flutterSecureStorage.write(
-            key: kUsername, value: userCredential.user?.displayName ?? "");
-        Auth.flutterSecureStorage.write(
-            key: kToken, value: userCredential.credential?.accessToken ?? "");
-        // Cambiar por Perfil
-        // Get.offNamedUntil(
-        //     HomeScreen.routerName, ModalRoute.withName(HomeScreen.routerName));
-      } catch (e) {
-        setState(() {
-          _error = "$e";
-        });
-        print("error:  $e");
-      }
-    }
   }
 }
