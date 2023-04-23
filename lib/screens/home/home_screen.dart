@@ -5,6 +5,7 @@ import 'package:accesorios_para_mascotas/screens/home/home_controller.dart';
 import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
 import 'package:accesorios_para_mascotas/screens/nosotros/nosotros_screen.dart';
 import 'package:accesorios_para_mascotas/screens/profile/profile_screen.dart';
+import 'package:accesorios_para_mascotas/screens/register/additional_info_screen.dart';
 import 'package:accesorios_para_mascotas/screens/register/categories_screen.dart';
 import 'package:accesorios_para_mascotas/screens/register/products_screen.dart';
 import 'package:accesorios_para_mascotas/screens/register/users_screen.dart';
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
 
-    autoScrollController!.addListener(_scrollListener);
+    autoScrollController.addListener(_scrollListener);
     super.initState();
   }
 
@@ -191,6 +192,8 @@ class BodyContainer extends StatelessWidget {
         return const ProductsScreen();
       case BodyEnum.categories:
         return const CategoriesScreen();
+      case BodyEnum.additionalInfo:
+        return const AdditionalInfoScreen();
       case BodyEnum.carrito:
         return const BodyItem(name: "carrito");
       case BodyEnum.nosotros:

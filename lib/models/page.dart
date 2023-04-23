@@ -17,6 +17,10 @@ final listRegisters = [
     bodyEnum: BodyEnum.categories,
   ),
   PageModel(
+    name: "Información Adicional",
+    bodyEnum: BodyEnum.additionalInfo,
+  ),
+  PageModel(
     name: "Usuarios",
     bodyEnum: BodyEnum.users,
   ),

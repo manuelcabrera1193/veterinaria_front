@@ -10,5 +10,6 @@ enum BodyEnum {
   profile,
   users,
   products,
-  categories
+  categories,
+  additionalInfo,
 }
