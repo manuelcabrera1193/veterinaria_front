@@ -7,3 +7,4 @@ class SaleDetail {
 
   SaleDetail({required this.item, required this.cantidad, required this.subtotal});
 }
+

@@ -14,11 +14,17 @@ class SectionListView extends StatefulWidget {
   final List<Categories> categories;
   final List<ItemProduct> products;
 
+  final Function(ItemProduct, int, bool) event;
+
+  final int? position;
+
   const SectionListView({
     Key? key,
     required this.autoScrollController,
     required this.categories,
     required this.products,
+    required this.event,
+    required this.position,
   }) : super(key: key);
 
   @override
@@ -58,7 +64,7 @@ class _SectionListViewState extends State<SectionListView> {
                         names: list.map((e) => e.title).toList(),
                         scrollController: widget.autoScrollController,
                       ),
-                      0,
+                      widget.position ?? 0,
                       widget.autoScrollController,
                     ),
                   )
@@ -67,7 +73,10 @@ class _SectionListViewState extends State<SectionListView> {
                         responsiveApp.edgeInsetsApp?.allExLargeEdgeInsets ??
                             const EdgeInsets.all(10),
                     child: addScroll(
-                      ProductSection(section: list[index - 1]),
+                      ProductSection(
+                        section: list[index - 1],
+                        event: widget.event,
+                      ),
                       index,
                       widget.autoScrollController,
                     ),

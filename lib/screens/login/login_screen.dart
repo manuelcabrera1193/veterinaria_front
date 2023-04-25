@@ -104,6 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
                                   _email = input ?? "";
                                 },
+                                decoration: const InputDecoration(
+                                  hintText: "Usuario",
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
                             Container(

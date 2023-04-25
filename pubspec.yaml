@@ -45,6 +45,12 @@ dependencies:
   flutterfire_cli: ^0.2.7
   firebase_core_desktop: ^1.0.2
   flutter_facebook_auth: ^5.0.8
+  flutter_paypal: ^0.0.8
+  paypal_sdk: ^1.0.7
+  webviewx: ^0.2.2
+  oauth2: ^2.0.1
+  flutter_paypal_sdk: ^0.0.1
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

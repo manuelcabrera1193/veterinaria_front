@@ -99,13 +99,13 @@ class _ShopDrawerState extends State<ShopDrawer> {
                       title: carrito,
                       icon: Icons.local_grocery_store_outlined,
                     ),
-                    getItem(
-                      onTap: () {
-                        widget.redirect(BodyEnum.ventas);
-                      },
-                      title: ventas,
-                      icon: Icons.add_shopping_cart_rounded,
-                    ),
+                    // getItem(
+                    //   onTap: () {
+                    //     widget.redirect(BodyEnum.ventas);
+                    //   },
+                    //   title: ventas,
+                    //   icon: Icons.add_shopping_cart_rounded,
+                    // ),
                     widget.user?.isAdmin ?? false
                         ? getItems(
                             onTap: () {

@@ -1,4 +1,5 @@
 import 'package:accesorios_para_mascotas/models/menu.dart';
+import 'package:flutter/material.dart';
 
 Menu getMenu(String name, int position) {
   String imageCustom = "";
@@ -23,4 +24,21 @@ Menu getMenu(String name, int position) {
     title: name,
     image: imageCustom,
   );
+}
+
+ImageProvider addImage(String url) {
+  try {
+    if (url.isEmpty || url.toLowerCase() == "null") {
+      return const AssetImage("assets/images/placeholder2.jpg");
+    } else {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            Image.asset("assets/images/placeholder2.jpg"),
+      ).image;
+    }
+  } catch (e) {
+    return const AssetImage("assets/images/placeholder2.jpg");
+  }
 }

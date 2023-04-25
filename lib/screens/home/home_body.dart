@@ -9,9 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class HomeBody extends StatefulWidget {
+  final Function(ItemProduct, int, bool) event;
+    final int? position;
+
   const HomeBody({
     super.key,
     required this.autoScrollController,
+    required this.event,
+    required this.position,
   });
 
   final AutoScrollController autoScrollController;
@@ -71,17 +76,29 @@ class _HomeBodyState extends State<HomeBody> {
           height: 24.0,
         ),
         const Carousel(),
-        isMobileAndTablet(context)
-            ? MenuTap(
-                categories: _categories,
-                products: _products,
-                size: _categories.length,
+        _products.isEmpty
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
               )
-            : SectionListView(
-                products: _products,
-                categories: _categories,
-                autoScrollController: widget.autoScrollController,
-              ),
+            : isMobileAndTablet(context)
+                ? MenuTap(
+                    categories: _categories,
+                    products: _products,
+                    size: _categories.length,
+                    event: widget.event,
+                  )
+                : SectionListView(
+                  position: widget.position,
+                    products: _products,
+                    categories: _categories,
+                    autoScrollController: widget.autoScrollController,
+                    event: widget.event,
+                  ),
       ],
     );
   }

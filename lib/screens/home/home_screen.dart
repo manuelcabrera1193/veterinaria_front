@@ -1,5 +1,8 @@
 import 'package:accesorios_para_mascotas/models/body_enum.dart';
+import 'package:accesorios_para_mascotas/models/item_product.dart';
 import 'package:accesorios_para_mascotas/models/profile.dart';
+import 'package:accesorios_para_mascotas/models/sale.dart';
+import 'package:accesorios_para_mascotas/screens/card/card_screen.dart';
 import 'package:accesorios_para_mascotas/screens/home/home_body.dart';
 import 'package:accesorios_para_mascotas/screens/home/home_controller.dart';
 import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
@@ -124,7 +127,23 @@ class _HomePageState extends State<HomePage> {
             loginGoogle: executeLoginGoogle,
             loginFacebook: executeLoginFacebook,
             logout: logout,
+            event: (product, cant, redirect) {
+              homeController.addProductCard(product, cant, redirect);
+              setState(() {});
+            },
+            sale: homeController.sale.value,
+            saveSale: () {},
+            redirectHome: () {
+              homeController.positionedHome();
+              homeController.redirectScreen(BodyEnum.home);
+              setState(() {});
+              homeController.resetPosition();
+            },
+            position: homeController.position.value == -1
+                ? null
+                : homeController.position.value,
           ),
+
           /**
            * End Body
            */
@@ -168,6 +187,13 @@ class BodyContainer extends StatelessWidget {
   final Future<String> Function() loginFacebook;
   final Future<void> Function() logout;
 
+  final Function(ItemProduct, int, bool) event;
+  final Sale sale;
+  final Function() saveSale;
+  final Function() redirectHome;
+
+  final int? position;
+
   const BodyContainer({
     super.key,
     required this.autoScrollController,
@@ -177,13 +203,22 @@ class BodyContainer extends StatelessWidget {
     required this.loginGoogle,
     required this.loginFacebook,
     required this.logout,
+    required this.event,
+    required this.sale,
+    required this.saveSale,
+    required this.redirectHome,
+    required this.position,
   });
 
   @override
   Widget build(BuildContext context) {
     switch (body) {
       case BodyEnum.home:
-        return HomeBody(autoScrollController: autoScrollController);
+        return HomeBody(
+          autoScrollController: autoScrollController,
+          event: event,
+          position: position,
+        );
       case BodyEnum.contacts:
         return const BodyItem(name: "contacts");
       case BodyEnum.users:
@@ -195,7 +230,11 @@ class BodyContainer extends StatelessWidget {
       case BodyEnum.additionalInfo:
         return const AdditionalInfoScreen();
       case BodyEnum.carrito:
-        return const BodyItem(name: "carrito");
+        return CardScreen(
+          sale: sale,
+          saveSale: saveSale,
+          redirectHome: redirectHome,
+        );
       case BodyEnum.nosotros:
         return NosotrosWidget(autoScrollController: autoScrollController);
       case BodyEnum.login:
@@ -210,12 +249,12 @@ class BodyContainer extends StatelessWidget {
           user: user,
           logout: logout,
         );
-      case BodyEnum.contactamos:
-        return const BodyItem(name: "contactamos");
+      // case BodyEnum.contactamos:
+      //   return const BodyItem(name: "contactamos");
       case BodyEnum.registros:
         return const ListUsersScreen();
-      case BodyEnum.ventas:
-        return const BodyItem(name: "ventas");
+      // case BodyEnum.ventas:
+      //   return const BodyItem(name: "ventas");
       default:
         return Container();
     }

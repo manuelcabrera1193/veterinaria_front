@@ -78,13 +78,13 @@ class _HeaderWebState extends State<HeaderWeb> {
                       widget.redirect(BodyEnum.carrito);
                     },
                   ),
-                  HeaderButton(
-                    index: 3,
-                    title: ventas,
-                    redirect: () {
-                      widget.redirect(BodyEnum.ventas);
-                    },
-                  ),
+                  // HeaderButton(
+                  //   index: 3,
+                  //   title: ventas,
+                  //   redirect: () {
+                  //     widget.redirect(BodyEnum.ventas);
+                  //   },
+                  // ),
                   widget.user?.isAdmin ?? false
                       ? HeaderListButton(
                           views: listRegisters,

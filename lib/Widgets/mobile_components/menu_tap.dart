@@ -9,12 +9,14 @@ class MenuTap extends StatefulWidget {
   final List<Categories> categories;
   final List<ItemProduct> products;
   final int size;
+    final Function(ItemProduct, int, bool) event;
 
   const MenuTap({
     super.key,
     required this.categories,
     required this.products,
     required this.size,
+    required this.event,
   });
 
   @override
@@ -71,6 +73,7 @@ class MenuTapState extends State<MenuTap> {
                                     .where((element) =>
                                         element.category.uid == e.uid)
                                     .toList(),
+                                event: widget.event,
                               ),
                             )
                             .toList(),
