@@ -7,6 +7,7 @@ import 'package:accesorios_para_mascotas/screens/widgets/delete_widget.dart';
 import 'package:accesorios_para_mascotas/screens/widgets/input.dart';
 import 'package:accesorios_para_mascotas/screens/widgets/show_actions.dart';
 import 'package:accesorios_para_mascotas/utils/botton_sheet.dart';
+import 'package:accesorios_para_mascotas/utils/images.dart';
 import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -128,13 +129,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         tileColor: Theme.of(context).secondaryHeaderColor,
-                        leading: const ClipOval(
+                        leading: ClipOval(
                           child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Icon(
-                              Icons.category,
-                            ),
+                            width: 48,
+                            height: 48,
+                            child: Image(image: addImage(e.image)),
                           ),
                         ),
                         title: Text(
