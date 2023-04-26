@@ -298,9 +298,15 @@ class _ResumeState extends State<Resume> {
                               print(accessToken.token);
                               loading = false;
                               setState(() {});
-                              final result = await launchUrl(
-                                  Uri.parse(payment.approvalUrl!),
-                                  webOnlyWindowName: "_self");
+
+                              if (!await launchUrl(
+                                Uri.parse(payment.approvalUrl!),
+                                // mode: LaunchMode.externalApplication,
+                                // webOnlyWindowName: "_self",
+                              )) {
+                                throw Exception(
+                                    'Could not launch ${Uri.parse(payment.approvalUrl ?? "")}');
+                              }
                             }
                           },
                     child: Center(
