@@ -314,7 +314,7 @@ class _ResumeState extends State<Resume> {
     double mount = double.parse((widget.sale.total / 3.75).toStringAsFixed(2));
 
     String redirect = Uri.encodeFull(
-        "http://localhost:64637/#/Home?transaction=$userId&codRef=$idSale");
+        "https://accesorios-para-mascotas-96d2a.web.app/#/Home?transaction=$userId&codRef=$idSale");
 
     Map<String, dynamic> getTransaction() {
       Map<String, dynamic> transactions = {
@@ -324,10 +324,7 @@ class _ResumeState extends State<Resume> {
         },
         "redirect_urls": {
           "return_url": redirect,
-          "cancel_url": "http://localhost:64637/#/Home",
-          // "return_url":
-          //     "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
-          // "cancel_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
+          "cancel_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
         },
         'transactions': [
           {
