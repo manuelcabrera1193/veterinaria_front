@@ -1,5 +1,6 @@
 import 'package:accesorios_para_mascotas/models/sale.dart';
 import 'package:accesorios_para_mascotas/models/sale_detail.dart';
+import 'package:accesorios_para_mascotas/utils/botton_sheet.dart';
 import 'package:accesorios_para_mascotas/utils/images.dart';
 import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
@@ -244,70 +245,8 @@ class _ResumeState extends State<Resume> {
                     onPressed: widget.sale.saleDetails.isEmpty
                         ? null
                         : () async {
-                            loading = true;
-                            setState(() {});
-
                             widget.saveSale();
-
-                            FlutterPaypalSDK sdk = FlutterPaypalSDK(
-                              clientId:
-                                  'AccP_GyEEgvb25VbL4FN9S1_YMp4xqpUkSKoASy15vYixDuTe40IOTRSaMqLBP3tzKKar95OJDJvziQr',
-                              clientSecret:
-                                  'EF-EAtNiMwYK7-S8uxdlvfuAKaiN7R349VebbcTThgl0vwK35072oTcbWR2jH4uaqEiXyeZYcDm2WgUB',
-                              mode: Mode.sandbox,
-                            );
-                            AccessToken accessToken =
-                                await sdk.getAccessToken();
-
-                            double mount = double.parse(
-                                (widget.sale.total / 3.75).toStringAsFixed(2));
-
-                            Map<String, dynamic> getTransaction() {
-                              Map<String, dynamic> transactions = {
-                                "intent": "sale",
-                                "payer": {
-                                  "payment_method": "paypal",
-                                },
-                                "redirect_urls": {
-                                  "return_url":
-                                      "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
-                                  "cancel_url":
-                                      "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
-                                },
-                                'transactions': [
-                                  {
-                                    "amount": {
-                                      "currency": "USD",
-                                      "total": mount.toString(),
-                                    },
-                                  }
-                                ],
-                              };
-
-                              return transactions;
-                            }
-
-                            Payment payment = await sdk.createPayment(
-                              getTransaction(),
-                              accessToken.token!,
-                            );
-
-                            if (payment.status) {
-                              print(payment.executeUrl);
-                              print(payment.approvalUrl);
-                              print(accessToken.token);
-                              loading = false;
-                              setState(() {});
-
-                              if (!await launchUrl(
-                                Uri.parse(payment.approvalUrl!),
-                                // mode: LaunchMode.externalApplication,
-                                // webOnlyWindowName: "_self",
-                              )) {
-                                throw Exception(
-                                    'Could not launch ${Uri.parse(payment.approvalUrl ?? "")}');
-                              }
-                            }
+                            await loadPayPal();
                           },
                     child: Center(
                       child: loading
@@ -332,5 +271,63 @@ class _ResumeState extends State<Resume> {
         )
       ],
     );
+  }
+
+  Future<void> loadPayPal() async {
+    loading = true;
+    setState(() {});
+
+    FlutterPaypalSDK sdk = FlutterPaypalSDK(
+      clientId:
+          'AccP_GyEEgvb25VbL4FN9S1_YMp4xqpUkSKoASy15vYixDuTe40IOTRSaMqLBP3tzKKar95OJDJvziQr',
+      clientSecret:
+          'EF-EAtNiMwYK7-S8uxdlvfuAKaiN7R349VebbcTThgl0vwK35072oTcbWR2jH4uaqEiXyeZYcDm2WgUB',
+      mode: Mode.sandbox,
+    );
+    AccessToken accessToken = await sdk.getAccessToken();
+
+    double mount = double.parse((widget.sale.total / 3.75).toStringAsFixed(2));
+
+    Map<String, dynamic> getTransaction() {
+      Map<String, dynamic> transactions = {
+        "intent": "sale",
+        "payer": {
+          "payment_method": "paypal",
+        },
+        "redirect_urls": {
+          "return_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
+          "cancel_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
+        },
+        'transactions': [
+          {
+            "amount": {
+              "currency": "USD",
+              "total": mount.toString(),
+            },
+          }
+        ],
+      };
+
+      return transactions;
+    }
+
+    Payment payment = await sdk.createPayment(
+      getTransaction(),
+      accessToken.token!,
+    );
+
+    if (payment.status) {
+      loading = false;
+      setState(() {});
+
+      if (!await launchUrl(
+        Uri.parse(payment.approvalUrl!),
+        mode: LaunchMode.externalApplication,
+        webOnlyWindowName: "_self",
+      )) {
+        throw Exception(
+            'Could not launch ${Uri.parse(payment.approvalUrl ?? "")}');
+      }
+    }
   }
 }

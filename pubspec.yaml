@@ -51,6 +51,8 @@ dependencies:
   oauth2: ^2.0.1
   flutter_paypal_sdk: ^0.0.1
   url_launcher: ^6.1.10
+  firebase_crashlytics: ^3.1.1
+  firebase_messaging: ^14.4.1
 
 dev_dependencies:
   flutter_test:

@@ -129,12 +129,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         tileColor: Theme.of(context).secondaryHeaderColor,
-                        leading: ClipOval(
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Image(image: addImage(e.image)),
-                          ),
+                        leading: SizedBox(
+                          width: 72,
+                          height: 72,
+                          child: Image(image: addImage(e.image)),
                         ),
                         title: Text(
                           e.name,
