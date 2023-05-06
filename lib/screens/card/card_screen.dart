@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:accesorios_para_mascotas/models/sale.dart';
 import 'package:accesorios_para_mascotas/models/sale_detail.dart';
+import 'package:accesorios_para_mascotas/screens/login/login_screen.dart';
 import 'package:accesorios_para_mascotas/utils/botton_sheet.dart';
 import 'package:accesorios_para_mascotas/utils/images.dart';
 import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
@@ -14,13 +17,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CardScreen extends StatefulWidget {
   final Sale sale;
-  final Function() saveSale;
+  final Future<String> Function() saveSale;
   final Function() redirectHome;
+  final Function() redirectLogin;
+  final bool isLoggued;
+  final String userId;
+
   const CardScreen({
     Key? key,
     required this.sale,
     required this.saveSale,
     required this.redirectHome,
+    required this.redirectLogin,
+    required this.isLoggued,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -71,9 +81,11 @@ class _CardScreenState extends State<CardScreen> {
                   ),
                 ),
               Resume(
-                sale: widget.sale,
-                saveSale: widget.saveSale,
-              ),
+                  sale: widget.sale,
+                  saveSale: widget.saveSale,
+                  isLoggued: widget.isLoggued,
+                  redirectLogin: widget.redirectLogin,
+                  userId: widget.userId),
             ],
           )
         : Row(
@@ -131,7 +143,10 @@ class _CardScreenState extends State<CardScreen> {
                 flex: 2,
                 child: Resume(
                   sale: widget.sale,
+                  redirectLogin: widget.redirectLogin,
                   saveSale: widget.saveSale,
+                  isLoggued: widget.isLoggued,
+                  userId: widget.userId,
                 ),
               ),
             ],
@@ -167,12 +182,18 @@ class ItemCard extends StatelessWidget {
 }
 
 class Resume extends StatefulWidget {
-  final Function() saveSale;
+  final Future<String> Function() saveSale;
+  final Function() redirectLogin;
+  final bool isLoggued;
+  final String userId;
 
   const Resume({
     super.key,
     required this.sale,
+    required this.redirectLogin,
     required this.saveSale,
+    required this.isLoggued,
+    required this.userId,
   });
 
   final Sale sale;
@@ -245,8 +266,12 @@ class _ResumeState extends State<Resume> {
                     onPressed: widget.sale.saleDetails.isEmpty
                         ? null
                         : () async {
-                            widget.saveSale();
-                            await loadPayPal();
+                            if (!widget.isLoggued) {
+                              widget.redirectLogin();
+                            } else {
+                              final idSale = await widget.saveSale();
+                              await loadPayPal(widget.userId, idSale);
+                            }
                           },
                     child: Center(
                       child: loading
@@ -273,7 +298,7 @@ class _ResumeState extends State<Resume> {
     );
   }
 
-  Future<void> loadPayPal() async {
+  Future<void> loadPayPal(String userId, String idSale) async {
     loading = true;
     setState(() {});
 
@@ -288,6 +313,9 @@ class _ResumeState extends State<Resume> {
 
     double mount = double.parse((widget.sale.total / 3.75).toStringAsFixed(2));
 
+    String redirect = Uri.encodeFull(
+        "http://localhost:64637/#/Home?transaction=$userId&codRef=$idSale");
+
     Map<String, dynamic> getTransaction() {
       Map<String, dynamic> transactions = {
         "intent": "sale",
@@ -295,8 +323,11 @@ class _ResumeState extends State<Resume> {
           "payment_method": "paypal",
         },
         "redirect_urls": {
-          "return_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
-          "cancel_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
+          "return_url": redirect,
+          "cancel_url": "http://localhost:64637/#/Home",
+          // "return_url":
+          //     "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
+          // "cancel_url": "https://accesorios-para-mascotas-96d2a.web.app/#/Home",
         },
         'transactions': [
           {

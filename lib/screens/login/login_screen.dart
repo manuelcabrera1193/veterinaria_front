@@ -1,4 +1,3 @@
-import 'package:accesorios_para_mascotas/screens/widgets/input.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -58,14 +57,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: const <Widget>[
                           Text(
                             "Login",
-                            style: TextStyle(color: Colors.grey, fontSize: 40),
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 40),
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           Text(
                             "Bienvenido",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 18),
                           ),
                         ],
                       ),
@@ -78,8 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .background,
                                   blurRadius: 20,
                                   offset: const Offset(0, 10))
                             ]),
@@ -134,7 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 decoration: const InputDecoration(
                                     hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey),
+                                    hintStyle:
+                                        TextStyle(color: Colors.grey),
                                     border: InputBorder.none),
                               ),
                             ),
@@ -162,9 +165,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             setState(() {
                               _error = "";
                             });
-                            if (_formKey.currentState?.validate() ?? false) {
+                            if (_formKey.currentState?.validate() ??
+                                false) {
                               _formKey.currentState?.save();
-                              _error = await widget.login(_email, _password);
+                              _error =
+                                  await widget.login(_email, _password);
                             }
                             setState(() {});
                           },
@@ -239,7 +244,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Text(
                         _error,
-                        style: const TextStyle(color: Colors.red, fontSize: 18),
+                        style: const TextStyle(
+                            color: Colors.red, fontSize: 18),
                       ),
                     ],
                   ),

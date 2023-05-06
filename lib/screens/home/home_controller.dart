@@ -5,6 +5,7 @@ import 'package:accesorios_para_mascotas/models/item_product.dart';
 import 'package:accesorios_para_mascotas/models/profile.dart';
 import 'package:accesorios_para_mascotas/models/sale.dart';
 import 'package:accesorios_para_mascotas/models/sale_detail.dart';
+import 'package:accesorios_para_mascotas/screens/register/firestore_service.dart';
 import 'package:accesorios_para_mascotas/utils/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,68 +25,16 @@ class HomeController extends SuperController<dynamic> {
   var position = (-1).obs;
 
   var profile = Profile(
-          isLogged: false,
-          isAdmin: false,
-          // isAdmin: true,
-          name: "",
-          email: "",
-          address: '',
-          phoneNumber: '',
-          photo: '',
-          uid: '')
-      .obs;
-
-
-
-
-Future<void> catalogProductsExamples(core.PayPalHttpClient payPalHttpClient) async {
-  var productsApi = CatalogProductsApi(payPalHttpClient);
-
-  // Get product details
-  try {
-    var product = await productsApi.showProductDetails('product_id');
-    print(product);
-  } on core.ApiException catch (e) {
-    print(e);
-  }
-
-  // List products
-  try {
-    var productsCollection = await productsApi.listProducts();
-
-    for (var product in productsCollection.products) {
-      print(product);
-    }
-  } on core.ApiException catch (e) {
-    print(e);
-  }
-
-  // Create product
-  try {
-    var createProductRequest = ProductRequest(
-        name: 'test_product',
-        type: ProductType.digital,
-        description: 'test_description');
-
-    var product = await productsApi.createProduct(createProductRequest);
-
-    print(product);
-  } on core.ApiException catch (e) {
-    print(e);
-  }
-
-  // Update product
-  try {
-    await productsApi.updateProduct('product_id', [
-      core.Patch(
-          op: core.PatchOperation.replace,
-          path: '/description',
-          value: 'Updated description')
-    ]);
-  } on core.ApiException catch (e) {
-    print(e);
-  }
-}
+    isLogged: false,
+    isAdmin: false,
+    // isAdmin: true,
+    name: "",
+    email: "",
+    address: '',
+    phoneNumber: '',
+    photo: '',
+    uid: '',
+  ).obs;
 
   @override
   void onDetached() {}
@@ -111,14 +60,15 @@ Future<void> catalogProductsExamples(core.PayPalHttpClient payPalHttpClient) asy
     await FirebaseAuth.instance.signOut();
     print('Sesión cerrada');
     profile(Profile(
-        isLogged: false,
-        isAdmin: false,
-        name: "",
-        email: "",
-        address: '',
-        phoneNumber: '',
-        photo: '',
-        uid: ''));
+      isLogged: false,
+      isAdmin: false,
+      name: "",
+      email: "",
+      address: '',
+      phoneNumber: '',
+      photo: '',
+      uid: '',
+    ));
     sale(getEmptySale());
     bodyEnumState(BodyEnum.home);
   }
@@ -256,5 +206,66 @@ Future<void> catalogProductsExamples(core.PayPalHttpClient payPalHttpClient) asy
 
   void resetPosition() {
     position(-1);
+  }
+
+  Future<String> saveSale() async {
+    try {
+      final result = await FirestoreService().addDocument(
+          "sales",
+          sale.value
+              .copy(uid: profile.value.uid, usuario: profile.value)
+              .toMap());
+      print("idSale: ${result.id}");
+      return result.id;
+    } catch (e) {
+      print(e);
+      return "";
+    }
+  }
+
+  @override
+  void onReady() {
+    //validateLogin();
+    super.onReady();
+  }
+
+  Future<void> validateLogin() async {
+    try {
+      final userId =
+          Get.routing.current.split("?")[1].split("&")[0].split("=")[1];
+      if (userId.isNotEmpty) {
+        final docRef =
+            FirebaseFirestore.instance.collection("users").doc(userId);
+        final doc = await docRef.get();
+        final data = doc.data() as Map<String, dynamic>;
+        final profilei = Profile.fromMap(data);
+
+        profile(profilei.copy(
+          isLogged: true,
+          isAdmin: profilei.email.startsWith("admin@"),
+        ));
+      }
+
+      final idSaleLabel =
+          Get.routing.current.split("?")[1].split("&")[1].split("=")[0];
+      final idSale =
+          Get.routing.current.split("?")[1].split("&")[1].split("=")[1];
+      print(idSale);
+      if (idSale.isNotEmpty) {
+        final docRef =
+            FirebaseFirestore.instance.collection("sales").doc(idSale);
+        final doc = await docRef.get();
+        print(doc.data());
+        final data = doc.data() as Map<String, dynamic>;
+        final salei = Sale.fromMap(data);
+        print(salei);
+        FirebaseFirestore.instance
+            .collection("sales")
+            .doc(idSale)
+            .set(salei.copy(completed: true).toMap());
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

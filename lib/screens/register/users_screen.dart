@@ -4,7 +4,6 @@ import 'package:accesorios_para_mascotas/screens/widgets/buttons_bottom.dart';
 import 'package:accesorios_para_mascotas/screens/widgets/delete_widget.dart';
 import 'package:accesorios_para_mascotas/screens/widgets/input.dart';
 import 'package:accesorios_para_mascotas/screens/widgets/show_actions.dart';
-import 'package:accesorios_para_mascotas/utils/botton_sheet.dart';
 import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

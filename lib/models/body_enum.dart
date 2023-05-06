@@ -9,5 +9,5 @@ enum BodyEnum {
   users,
   products,
   categories,
-  additionalInfo,
+  additionalInfo, ventas,
 }

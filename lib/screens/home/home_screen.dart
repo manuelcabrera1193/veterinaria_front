@@ -12,9 +12,11 @@ import 'package:accesorios_para_mascotas/screens/register/additional_info_screen
 import 'package:accesorios_para_mascotas/screens/register/categories_screen.dart';
 import 'package:accesorios_para_mascotas/screens/register/products_screen.dart';
 import 'package:accesorios_para_mascotas/screens/register/users_screen.dart';
+import 'package:accesorios_para_mascotas/screens/sales/sale_screen.dart';
 import 'package:accesorios_para_mascotas/utils/keys.dart';
 import 'package:accesorios_para_mascotas/utils/sizing_info.dart';
 import 'package:accesorios_para_mascotas/values/responsive_app.dart';
+import 'package:accesorios_para_mascotas/values/string_app.dart';
 import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_app_bar.dart';
 import 'package:accesorios_para_mascotas/widgets/mobile_components/shop_drawer.dart';
 import 'package:accesorios_para_mascotas/widgets/web_components/footer/footer.dart';
@@ -29,6 +31,9 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print("page: ${Get.routing.current}");
+    print("arg: ${Get.routing.route?.settings.arguments}");
+
     return const HomePage();
   }
 }
@@ -64,7 +69,14 @@ class _HomePageState extends State<HomePage> {
         axis: Axis.vertical);
 
     autoScrollController.addListener(_scrollListener);
+    validateLogin();
     super.initState();
+  }
+
+  Future<void> validateLogin() async {
+    final result = await homeController.validateLogin();
+    setState(() {});
+    return result;
   }
 
   @override
@@ -76,12 +88,14 @@ class _HomePageState extends State<HomePage> {
         : 1;
 
     _isVisible = _scrollPosition >= responsiveApp!.menuHeight;
+
     return Scaffold(
       key: homeScaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.background,
       floatingActionButton: Visibility(
         visible: _isVisible,
         child: FloatingActionButton(
+          heroTag: UniqueKey(),
           onPressed: () => {autoScrollController.scrollToIndex(0)},
           child: const Icon(Icons.arrow_upward),
         ),
@@ -132,16 +146,21 @@ class _HomePageState extends State<HomePage> {
               setState(() {});
             },
             sale: homeController.sale.value,
-            saveSale: () {},
+            saveSale: homeController.saveSale,
             redirectHome: () {
               homeController.positionedHome();
               homeController.redirectScreen(BodyEnum.home);
               setState(() {});
               homeController.resetPosition();
             },
+            redirectLogin: () {
+              homeController.redirectScreen(BodyEnum.login);
+              setState(() {});
+            },
             position: homeController.position.value == -1
                 ? null
                 : homeController.position.value,
+            isLoggued: homeController.getUser().isLogged,
           ),
 
           /**
@@ -157,6 +176,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> logout() async {
     await homeController.logout();
     setState(() {});
+    Get.offAllNamed(HomeScreen.routerName);
   }
 
   Future<String> executeLoginGoogle() async {
@@ -189,8 +209,11 @@ class BodyContainer extends StatelessWidget {
 
   final Function(ItemProduct, int, bool) event;
   final Sale sale;
-  final Function() saveSale;
+  final Future<String> Function() saveSale;
   final Function() redirectHome;
+  final Function() redirectLogin;
+
+  final bool isLoggued;
 
   final int? position;
 
@@ -207,12 +230,16 @@ class BodyContainer extends StatelessWidget {
     required this.sale,
     required this.saveSale,
     required this.redirectHome,
+    required this.redirectLogin,
     required this.position,
+    required this.isLoggued,
   });
 
   @override
   Widget build(BuildContext context) {
     switch (body) {
+      case BodyEnum.ventas:
+        return const SalesScreen();
       case BodyEnum.home:
         return HomeBody(
           autoScrollController: autoScrollController,
@@ -234,6 +261,9 @@ class BodyContainer extends StatelessWidget {
           sale: sale,
           saveSale: saveSale,
           redirectHome: redirectHome,
+          redirectLogin: redirectLogin,
+          isLoggued: isLoggued,
+          userId: user?.uid ?? "",
         );
       case BodyEnum.nosotros:
         return NosotrosWidget(autoScrollController: autoScrollController);

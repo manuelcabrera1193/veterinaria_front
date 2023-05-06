@@ -22,6 +22,7 @@ class ShowActionsWidget extends StatelessWidget {
             horizontal: 4,
           ),
           child: FloatingActionButton(
+            heroTag: UniqueKey(),
             child: const Icon(Icons.edit),
             onPressed: () {
               showModalBottomSheetCustom(
@@ -37,6 +38,7 @@ class ShowActionsWidget extends StatelessWidget {
             horizontal: 4,
           ),
           child: FloatingActionButton(
+            heroTag: UniqueKey(),
             child: const Icon(Icons.delete),
             onPressed: () {
               showModalBottomSheetCustom(

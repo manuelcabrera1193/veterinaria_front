@@ -95,6 +95,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     width: 20,
                   ),
                   FloatingActionButton(
+                    heroTag: UniqueKey(),
                     onPressed: () {
                       showModalBottomSheetCustom(
                           context: context,

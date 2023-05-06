@@ -93,6 +93,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     width: 20,
                   ),
                   FloatingActionButton(
+                    heroTag: UniqueKey(),
                     onPressed: () {
                       showModalBottomSheetCustom(
                           context: context,

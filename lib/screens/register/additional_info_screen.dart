@@ -93,6 +93,7 @@ class _AdditionalInfoScreenState extends State<AdditionalInfoScreen> {
                     width: 20,
                   ),
                   FloatingActionButton(
+                    heroTag: UniqueKey(),
                     onPressed: () {
                       showModalBottomSheetCustom(
                           context: context,

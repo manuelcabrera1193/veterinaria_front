@@ -11,6 +11,7 @@ class ButtonsBottomWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         FloatingActionButton(
+          heroTag: UniqueKey(),
           backgroundColor: Colors.grey.shade300,
           onPressed: null,
           child: IconButton(
@@ -20,6 +21,7 @@ class ButtonsBottomWidget extends StatelessWidget {
           ),
         ),
         FloatingActionButton(
+          heroTag: UniqueKey(),
           backgroundColor: Colors.grey.shade300,
           onPressed: null,
           child: IconButton(

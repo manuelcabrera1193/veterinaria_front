@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:accesorios_para_mascotas/models/sale.dart';
+
 class Profile {
   String uid;
   bool isLogged;
@@ -44,4 +46,27 @@ class Profile {
         phoneNumber: json["phoneNumber"],
         address: json["address"],
       );
+
+  Profile copy({
+    String? uid,
+    bool? isLogged,
+    bool? isAdmin,
+    String? name,
+    String? email,
+    String? photo,
+    String? phoneNumber,
+    String? address,
+    List<Sale>? sales,
+  }) {
+    return Profile(
+      uid: uid ?? this.uid,
+      isLogged: isLogged ?? this.isLogged,
+      isAdmin: isAdmin ?? this.isAdmin,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      photo: photo ?? this.photo,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+    );
+  }
 }
